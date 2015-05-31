@@ -1,0 +1,9 @@
+{
+  "name": "tab",
+  "title": "tab",
+  "id": "id@baku.ptab",
+  "description": "My way to manage tabs",
+  "author": "Andrea Marchesini",
+  "license": "MPL 2.0",
+  "version": "0.1"
+}

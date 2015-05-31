@@ -1,0 +1,14 @@
+.container {
+  text-align: center;
+}
+
+.page {
+  border-radius: 3px;
+  text-align: center;
+  background-color: #EEE;
+  margin-bottom: 10px;
+}
+
+.well {
+    box-sizing: border-box;
+}
