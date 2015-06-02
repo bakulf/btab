@@ -21,6 +21,7 @@ let Controller = {
 
     document.getElementById("buttonSearch").onclick = function() {
       this.searchChanged();
+      return false;
     }.bind(this);
 
     let that = this;
