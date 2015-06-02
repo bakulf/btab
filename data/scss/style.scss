@@ -1,0 +1,446 @@
+$orange: #EF4036;
+$grey: #333333;
+
+$primary: $orange;
+$secondary: $grey;
+
+@import "mixin.scss";
+@import "fonts.scss";
+
+header {
+  border-bottom:1px solid $primary;
+  height: 60px;
+  line-height: 60px;
+  img {
+    height: 30px;
+  }
+
+  .separator,
+  .filter-name {
+    height: 60px;
+    line-height: 60px;
+    display: inline-block;
+    color: $primary;
+  }
+
+  .separator {
+    font-size:20px;
+  }
+
+  .filter-name {
+    font-family: "Georgia", serif;
+    font-style: italic;
+    font-size:18px;
+  }
+
+  form {
+    height: 60px;
+    line-height: 60px;
+    .form-item {
+      border:1px solid $primary;
+      @include vertical-align;
+      margin:0;
+      padding:0;
+      height: 30px;
+      float: left;
+      input[type="text"] {
+        margin:0;
+        height: 28px;
+        border: none;
+        box-shadow:none;
+        color: $secondary;
+        float: left;
+        width:220px;
+
+        &:focus {
+          background:white;
+          color: $primary;
+        }
+      }
+
+      .pipe {
+        height: 24px;
+        width: 1px;
+        margin-top:2px;
+        float: left;
+        display: block;
+        background: $primary;
+      }
+
+      .button-search {
+        position: relative;
+        background: none;
+        float:right;
+        width:30px;
+        height: 24px;
+        padding:0;
+        margin-top:2px;
+        &:before {
+          position:absolute;
+          top:3px;
+          left:2px;
+          width:24px;
+          height: 24px;
+          color: $primary;
+        }
+
+        &.icon-repeat {
+          -webkit-animation:spin 0.5s linear 1;
+          -moz-animation:spin 0.5s linear 1;
+          animation:spin 0.5s linear 1;
+        }
+      }
+    }
+
+    .settings {
+      float: left;
+      height: 30px;
+      width:30px;
+      text-align: center;
+      margin-top:21px;
+    }
+  }
+}
+
+.overview-list {
+  h2 {
+    margin:0 20px 20px 20px;
+    font-family: "Georgia", serif;
+    font-style:italic;
+    font-size:30px;
+  }
+  margin-top:40px;
+  .single-item {
+    .toolbar {
+      display: none;
+      &.active {
+        display: block;
+        margin:0;
+        padding:0;
+        margin:10px;
+
+        li.icon-star {
+          display: block;
+          font-size: 20px;
+          color: $primary;
+        }
+
+        li.icon-trash {
+          display: none;
+        }
+      }
+    }
+    position: relative;
+    border:1px solid $primary;
+    @include border-radius(5px);
+    margin-bottom:20px;
+    height: 240px;
+    @include transition(.2s);
+    &:after {
+      content:'…';
+      position: absolute;
+      bottom:5px;
+      right:10px;
+      font-size: 20px;
+      color: #999;
+    }
+    h2 {
+      @include transition(.2s);
+      font-family: "Georgia", serif;
+      font-size: 16px;
+      font-style:italic;
+      position:absolute;
+      bottom:5px;
+      left:10px;
+      max-height: 70px;
+      max-width:315px;
+      line-height:24px;
+      overflow: hidden;
+    }
+    &:hover {
+      background:$secondary;
+      border-color:$secondary;
+      color: white;
+      h2 {
+        color: white;
+      }
+      :after {
+        color: white;
+      }
+      .toolbar {
+        display: block;
+        margin:0;
+        padding:0;
+        margin:10px;
+        li {
+          margin:0;
+          padding:0;
+          float: left;
+          list-style: none;
+          font-size: 20px;
+          display: block !important;
+          cursor: pointer;
+          @include transition(.2s);
+          &:last-child {
+            float: right;
+          }
+          &:hover {
+            color: $primary;
+          }
+        }
+      }
+    }
+    &:active {
+      background:$primary;
+      border:1px solid $primary;
+      color: white;
+      h2 {
+        color: white;
+      }
+      :after {
+        color: white;
+      }
+      &:hover {
+        background:$primary;
+        border:1px solid $primary;
+      }
+    }
+  }
+}
+
+.settings {
+  margin-top:40px;
+  .unhappyMessage {
+    background: red;
+    color: white;
+    font-family: "Georgia", serif;
+    font-size: 14px;
+    font-style: italic;
+    width: 100%;
+    padding:5px;
+    display: block;
+  }
+  .form-item {
+    margin: 40px 0;
+    label {
+      font-family: "Georgia", serif;
+      font-size: 14px;
+      font-style: italic;
+      color: #333;
+    }
+  }
+}
+
+.tab-results {
+  text-align: center;
+  position: relative;
+  height: 600px;
+  h1 {
+    font-family: "Georgia", serif;
+    font-style:italic;
+    font-size: 100px;
+    margin:0;
+    padding:0;
+    @include vertical-align;
+    &.no-tabs {
+      color: #CCC;
+    }
+  }
+
+  .search-query {
+    top:20px;
+    left:20px;
+    position: absolute;
+    font-size: 20px;
+    font-family: "Georgia", serif;
+    font-style:italic;
+    text-align: left;
+    color: $secondary;
+    margin:0;
+    padding:0;
+    em {
+      color: $primary;
+    }
+    .icon-close {
+      margin-left:10px;
+      margin-top:5px;
+      display: block;
+      float: right;
+      cursor: pointer;
+    }
+  }
+
+}
+
+.content-wrapper {
+  aside {
+    background:white;
+    padding-top:20px;
+    overflow: auto;
+    border-right:1px solid $primary;
+    .single-item {
+      border:1px solid #ccc;
+      @include border-radius(5px);
+      margin-bottom:20px;
+      min-height: 140px;
+      position:relative;
+      &.active {
+        position: relative;
+        &:after {
+          width: 0;
+          height: 0;
+          border-style: solid;
+          border-width: 20px 20px 20px 0;
+          border-color: transparent $primary transparent transparent;
+          position:absolute;
+          right:-16px;
+          top:50px;
+        }
+      }
+      .toolbar {
+        display: none;
+        &.active {
+          display: block;
+          margin:0;
+          padding:0;
+          margin:10px;
+
+          li.icon-star {
+            display: block;
+            font-size: 20px;
+            color: $primary;
+          }
+
+          li.icon-trash {
+            display: none;
+          }
+        }
+      }
+      position: relative;
+      border:1px solid $primary;
+      @include border-radius(5px);
+      margin-bottom:20px;
+      @include transition(.2s);
+      &:after {
+        content:'…';
+        position: absolute;
+        bottom:5px;
+        right:10px;
+        font-size: 20px;
+        color: #999;
+      }
+      h2 {
+        @include transition(.2s);
+        font-family: "Georgia", serif;
+        font-size: 16px;
+        font-style:italic;
+        position:absolute;
+        bottom:5px;
+        left:10px;
+        max-height: 70px;
+        max-width:315px;
+        line-height:24px;
+        overflow: hidden;
+      }
+      &:hover {
+        background:$secondary;
+        border-color:$secondary;
+        color: white;
+        h2 {
+          color: white;
+        }
+        :after {
+          color: white;
+        }
+        .toolbar {
+          display: block;
+          margin:0;
+          padding:0;
+          margin:10px;
+          li {
+            margin:0;
+            padding:0;
+            float: left;
+            list-style: none;
+            font-size: 20px;
+            display: block !important;
+            cursor: pointer;
+            @include transition(.2s);
+            &:last-child {
+              float: right;
+            }
+            &:hover {
+              color: $primary;
+            }
+          }
+        }
+      }
+      &:active {
+        background:$primary;
+        border:1px solid $primary;
+        color: white;
+        h2 {
+          color: white;
+        }
+        :after {
+          color: white;
+        }
+        &:hover {
+          background:$primary;
+          border:1px solid $primary;
+        }
+      }
+    }
+  }
+  .url-toolbar {
+    border-bottom:1px solid $primary;
+    height: 30px;
+
+    ul {
+      margin:0;
+      li {
+        list-style: none;
+        float:left;
+        height: 30px;
+        border-right:1px solid $primary;
+
+        &:last-child {
+          border-right:0;
+          border-left: 1px solid $primary;
+          float: right;
+        }
+        &.url-readonly {
+          border-right:0;
+          input {
+            height: 28px;
+            border:none;
+            box-shadow:none;
+            background:#fff;
+            color: #bbb;
+            font-family: "Georgia", serif;
+            font-size: 13px;
+            font-style: italic;
+            min-width:700px;
+          }
+        }
+        a {
+          display: block;
+          height: 28px;
+          width: 28px;
+          text-align: center;
+          line-height:28px;
+
+
+        }
+      }
+    }
+  }
+  iframe {
+    border:none;
+  }
+}
+
+
+@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }

@@ -1,7 +1,9 @@
 /* See license.txt for terms of usage */
 
 let Controller = {
-  _filter: null,
+  _filterURL: null,
+  _filterName: null,
+
   _search: null,
   _searchTimeout: null,
 
@@ -9,16 +11,40 @@ let Controller = {
   _activeURL: null,
 
   init: function() {
-    this._filter = document.getElementById('filter');
+    this._filterURL = document.getElementById('filterURL');
+    this._filterName = document.getElementById('filterName');
 
     this._search = document.getElementById('search');
     this._search.onkeypress = function() {
       this.searchChanged();
     }.bind(this);
 
-    document.getElementById('settingsForm').onsubmit = function() {
-      return this.settingsSave();
+    document.getElementById("buttonSearch").onclick = function() {
+      this.searchChanged();
     }.bind(this);
+
+    let that = this;
+    $('#settingsForm').isHappy({
+      fields: {
+        '#filterName': {
+          required: true,
+          message: 'We need a name for this filter'
+        },
+        '#filterURL': {
+          required: true,
+          message: 'It has to be a valid filter URL',
+          test: function() {
+            var filter = document.getElementById("filterURL");
+            return filter.value.indexOf('http://') == 0 ||
+                   filter.value.indexOf('https://') == 0;
+          }
+        }
+      },
+      happy: function() {
+        that.settingsSave();
+        return false;
+      }
+    });
 
     document.getElementById('settingsAnchor').onclick = function() {
       this.settings();
@@ -26,8 +52,7 @@ let Controller = {
     }.bind(this);
 
     document.getElementById('titleAnchor').onclick = function() {
-      this._activeURL = null;
-      this.refreshDataNeeded();
+      this.mainPage();
       return false;
     }.bind(this);
 
@@ -47,17 +72,26 @@ let Controller = {
       }
     }.bind(this));
 
-    self.port.emit('dataNeeded');
-  },
-
-  settingsValidation: function() {
-    if (this._filter.value.indexOf('http://') != 0 &&
-        this._filter.value.indexOf('https://') != 0) {
-      $('#filterAlert').show();
+    document.getElementById('pageBack').onclick = function() {
+      this.goBack();
       return false;
-    }
+    }.bind(this);
 
-    return true;
+    document.getElementById('pageForward').onclick = function() {
+      this.goForward();
+      return false;
+    }.bind(this);
+
+    document.getElementById('pageReload').onclick = function() {
+      this.goReload();
+      return false;
+    }.bind(this);
+
+    $(window).resize(function() {
+      this.resize();
+    }.bind(this));
+
+    self.port.emit('dataNeeded');
   },
 
   searchChanged: function() {
@@ -66,59 +100,53 @@ let Controller = {
     }
 
     this._searchTimeout = setTimeout(function() {
+      $('.button-search').toggleClass('icon-search').toggleClass('icon-repeat');
       this.refreshDataNeeded();
     }.bind(this), 300);
   },
 
-  settings: function() {
-    $('#filterAlert').hide();
-    $('#settingsModal').foundation('reveal', 'open');
-
-    $(document).on('closed.fndtn.reveal', '[data-reveal]', function() {
-      if (!this.settingsSave()) {
-        this.settings();
-        $('#filterAlert').show();
+  showPage: function(aPage) {
+    let pages = [ 'settingsPage', 'gridPageNoResult', 'gridPageNoTab', 'gridPageRest', 'listPage' ];
+    for (let i = 0; i < pages.length; ++i) {
+      if (aPage == pages[i]) {
+        $("#" + pages[i]).show();
+      } else {
+        $("#" + pages[i]).hide();
       }
-    }.bind(this));
+    }
+  },
+
+  settings: function() {
+    this.showPage('settingsPage');
+  },
+
+  mainPage: function() {
+    this._activeURL = null;
+    this.refreshDataNeeded();
   },
 
   settingsSave: function() {
-    if (!this.settingsValidation()) {
-      return false;
-    }
-
-    self.port.emit('filterChanged', this._filter.value);
-    return true;
+    $("#filterTitleName").text(this._filterName.value);
+    self.port.emit('filterChanged', { url: this._filterURL.value,
+                                      name: this._filterName.value });
+    this.mainPage();
   },
 
   refreshDataNeeded: function() {
-    if (this._data.match != '') {
-      this._filter.value = this._data.match
+    if (this._data.match != '' || this._data.name != '') {
+      this._filterURL.value = this._data.match;
+      this._filterName.value = this._data.name;
+      $("#filterTitleName").text(this._filterName.value);
     } else {
       this.settings();
       return;
     }
 
-    let container = document.getElementById('container');
-    while(container.firstChild) {
-      container.removeChild(container.firstChild);
-    }
-
-    if (this._data.pages.length == 0) {
-      let h3 = document.createElement('h3');
-      h3.appendChild(document.createTextNode('Open some patch matching the filter URL'));
-      container.appendChild(h3);
-      return;
-    }
-
-    let pages = this.filterPages();
-
     if (this._activeURL) {
-      this.showListAndPage(pages, container);
-      return;
+      this.listPage();
+    } else {
+      this.gridPage();
     }
-
-    this.showGrid(pages, container);
   },
 
   filterPages: function() {
@@ -148,106 +176,187 @@ let Controller = {
     return pages;
   },
 
-  showGrid: function(aPages, aContainer) {
-    if (aPages.length == 0) {
-      let h3 = document.createElement('h3');
-      h3.appendChild(document.createTextNode('No results found'));
-      aContainer.appendChild(h3);
+  gridPage: function() {
+    if (this._data.pages.length == 0) {
+      this.showPage('gridPageNoTab');
       return;
     }
 
-    let row;
-    for (let i = 0; i < aPages.length; ++i) {
-      if (!(i % 4)) {
-        row = null;
-      }
-
-      if (!row) {
-        row = document.createElement('div');
-        row.setAttribute('class', 'row');
-        aContainer.appendChild(row);
-      }
-
-      let page = this.createPage(aPages[i]);
-      row.appendChild(page);
+    let pages = this.filterPages();
+    if (pages.length == 0) {
+      $("#searchGridResult").text(this._search.value);
+      this.showPage('gridPageNoResult');
+      return;
     }
+
+    let container = document.getElementById('gridPageRest');
+    while(container.firstChild) {
+      container.removeChild(container.firstChild);
+    }
+
+    if (this._search.value != "") {
+      let h = document.createElement('h3');
+      h.setAttribute('class', 'search-query');
+      h.appendChild(document.createTextNode('your searched for: '));
+      container.appendChild(h);
+
+      let em = document.createElement('em');
+      em.appendChild(document.createTextNode(this._search.value));
+      h.appendChild(em);
+    } else {
+      let h = document.createElement('h3');
+      h.setAttribute('class', 'search-query');
+      h.appendChild(document.createTextNode('Your tabs'));
+      container.appendChild(h);
+    }
+
+    for (let i = 0; i < pages.length; ++i) {
+      let page = this.createPage(pages[i]);
+
+      let div = document.createElement('div');
+      div.setAttribute('class', 'large-3 columns end');
+      div.appendChild(page);
+
+      container.appendChild(div);
+    }
+
+    this.showPage('gridPageRest');
   },
 
-  showListAndPage: function(aPages, aContainer) {
-    let mainRow = document.createElement('div');
-    mainRow.setAttribute('class', 'row');
-    aContainer.appendChild(mainRow);
-
-    let list = document.createElement('div');
-    list.setAttribute('class', 'row span3');
-    mainRow.appendChild(list);
-
-    let page = document.createElement('div');
-    page.setAttribute('class', 'row span9');
-    mainRow.appendChild(page);
-
-    let iframe = document.createElement('iframe');
-    iframe.setAttribute('src', this._activeURL);
-    page.appendChild(iframe);
-
-    if (aPages.length == 0) {
-      let h3 = document.createElement('h3');
-      h3.appendChild(document.createTextNode('No results found'));
-      list.appendChild(h3);
+  listPage: function() {
+    if (this._data.pages.length == 0) {
+      dump("BTAB: This seems a bug!\n");
+      this.mainPage();
+      return;
     }
 
-    // TODO: scroll to the right position!
-    // TODO: activate the correct one
-    for (let i = 0; i < aPages.length; ++i) {
-      let row = document.createElement('div');
-      row.setAttribute('class', 'row');
-      list.appendChild(row);
-
-      let page = this.createPage(aPages[i]);
-      row.appendChild(page);
+    let container = document.getElementById('listPageList');
+    while(container.firstChild) {
+      container.removeChild(container.firstChild);
     }
+
+    $("iframe").attr('src', this._activeURL);
+    $("#pageURL").attr('value', this._activeURL);
+
+    let pages = this.filterPages();
+
+    if (this._search.value != "") {
+      let h = document.createElement('h3');
+      h.setAttribute('class', 'search-query');
+      h.appendChild(document.createTextNode('your searched for: '));
+      container.appendChild(h);
+
+      let em = document.createElement('em');
+      em.appendChild(document.createTextNode(this._search.value));
+      h.appendChild(em);
+    } else {
+      let h = document.createElement('h3');
+      h.setAttribute('class', 'search-query');
+      h.appendChild(document.createTextNode('Your tabs'));
+      container.appendChild(h);
+    }
+
+    for (let i = 0; i < pages.length; ++i) {
+      let page = this.createPage(pages[i]);
+      container.appendChild(page);
+    }
+
+    this.showPage('listPage');
+    this.resize();
+  },
+
+  updateListPage: function() {
+    $("iframe").attr('src', this._activeURL);
+    $("#pageURL").attr('value', this._activeURL);
+
+    // TODO: canGoBack
+    // TODO: canGoForward
+  },
+
+  resize: function() {
+    // Just for the list page
+    if (!$("#listPage").is(":visible")) {
+      return;
+    }
+
+    var height_screen = $(window).height();
+    var width_screen = $(window).width();
+    $('.content-wrapper').css('height', height_screen - $('.content-wrapper').offset().top);
+    $('#tabs').css('height', height_screen - $('#tabs').offset().top);
+    $('iframe').css('width', width_screen - $('iframe').offset().left);
+    $('iframe').css('height', height_screen - $('iframe').offset().top);
   },
 
   createPage: function(aPage) {
-    let div = document.createElement('div');
-    div.setAttribute('class', 'large-3');
+    let item = document.createElement('div');
+    item.setAttribute('class', 'single-item');
 
-    let anchor = document.createElement('a');
-    anchor.setAttribute('href', '');
-    anchor.setAttribute('title', aPage.title);
-    div.appendChild(anchor);
-
-    let title = document.createElement('h4');
+    let title = document.createElement('h2');
     title.appendChild(document.createTextNode(aPage.title));
-    anchor.appendChild(title);
+    item.appendChild(title);
 
-    let img = document.createElement('img');
-    img.setAttribute('src', aPage.thumbnail);
-    anchor.appendChild(img);
+    let ul = document.createElement('ul');
+    ul.setAttribute('class', 'toolbar'); // TODO active
+    item.appendChild(ul);
 
-    let closeAnchor = document.createElement('a');
-    closeAnchor.appendChild(document.createTextNode('close'));
-    closeAnchor.setAttribute('href', '');
-    closeAnchor.setAttribute('title', 'Close tab');
-    div.appendChild(closeAnchor);
+    let li = document.createElement('li');
+    li.setAttribute('class', 'item icon-star');
+    ul.appendChild(li);
 
-    anchor.onclick = function() {
-      this.showPage(aPage);
+    li.onclick = function() {
+      // TODO
       return false;
     }.bind(this);
 
-    closeAnchor.onclick = function() {
-      self.port.emit('closeURL', aPage.url);
-      return false;
-    }
+    li = document.createElement('li');
+    li.setAttribute('class', 'item icon-trash');
+    ul.appendChild(li);
 
-    return div;
+    li.onclick = function(e) {
+      self.port.emit('closeURL', aPage.url);
+      e.stopPropagation();
+    }.bind(this);
+
+    item.onclick = function(e) {
+      this._activeURL = aPage.url;
+      this.listPage();
+      e.stopPropagation();
+    }.bind(this);
+
+    return item;
   },
 
-  showPage: function(aPage) {
-    this._activeURL = aPage.url;
-    this.refreshDataNeeded();
-  }
+  canGoBack: function() {
+    for (let i = 1; i < this._data.pages.length; ++i) {
+      if (this._data.pages[i].url == this._activeURL) {
+        return this._data.pages[i - 1].url;
+      }
+    }
+    return null;
+  },
+
+  canGoForward: function() {
+    for (let i = 0; i < this._data.pages.length - 1; ++i) {
+      if (this._data.pages[i].url == this._activeURL) {
+        return this._data.pages[i + 1].url;
+      }
+    }
+    return null;
+  },
+
+  goBack: function() {
+    this._activeURL = this.canGoBack();
+    this.updateListPage();
+  },
+
+  goForward: function() {
+    this._activeURL = this.canGoForward();
+    this.updateListPage();
+  },
+
+  goReload: function() {
+    $("iframe").attr('src', this._activeURL);
+  },
 };
 
 Controller.init();

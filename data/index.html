@@ -1,65 +1,103 @@
 <!DOCTYPE html>
-<html>
+
+<html class="no-js" lang="en">
   <head>
-    <title>FOOBAR</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="css/foundation.css" />
-    <script src="js/vendor/modernizr.js"></script>
-    <link href="css/main.css" rel="stylesheet" media="screen" />
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>B:TAB</title>
+    <link rel="stylesheet" href="css/foundation.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="js/vendor/modernizr.js"></script>
   </head>
   <body>
-
-    <div class="fixed">
-      <nav class="top-bar" data-topbar role="navigation">
-        <ul class="left title-area">
-          <li class="name">
-            <h1><a class="brand" href="" id="titleAnchor">FOOBAR</a></h1>
-          </li>
-        </ul>
-
-        <section class="top-bar-section">
-          <ul class="right">
-            <li class="has-form">
-              <div class="row collapse">
-                <div class="large-12 small-9 columns">
-                  <input id="search" type="text" placeholder="Search" />
-                </div>
+    <header class="row collapse">
+      <div class="large-12 columns">
+        <div class="row">
+          <div class="large-7 columns">
+            <a href="" id="titleAnchor"><img src="img/btab.svg" alt="B:TAB"></a>
+            <span class="separator icon-fast-forward"></span>
+            <span class="filter-name" id="filterTitleName">&nbsp;</span>
+          </div>
+          <div class="large-3 large-offset-2 columns end">
+            <form class="row">
+              <div class="form-item">
+                <input type="text" placeholder="Search" value="" id="search">
+                <span class="pipe"></span>
+                <button class="button-search icon-search" id="buttonSearch"></button>
               </div>
-            </li>
-            <li class="divider"></li>
-            <li class="has-form">
-              <a href="#" class="button" id="settingsAnchor" title="Settings">
-                <img src="img/settings.svg" />
-              </a>
-            </li>
-          </ul>
-        </section>
-      </nav>
+              <a class="settings icon-cog" href="" id="settingsAnchor" title="Settings"></a>  
+            </form>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Settings -->
+    <div class="settings row" id="settingsPage">
+      <div class="large-6 columns">
+        <form id="settingsForm">
+          <div class="form-item">
+            <label for="filterName">Choose a filter name</label>
+            <input id="filterName" type="text" name="title" value="" placeholder="Filter name">
+            <span class="small-desc">TODO</span>
+          </div>
+          <div class="form-item">
+            <label for="filterURL">Choose your filter URl</label>
+            <input id="filterURL"  type="text" name="filter" value="" placeholder="http://www.example.com">
+            <span class="small-desc">TODO</span>
+          </div>
+          <button type="submit">SAVE</button>
+        </form>
+      </div>
     </div>
 
-    <div id="container"></div>
+    <!-- Grid Page: no tabs -->
+    <div class="tab-results row" id="gridPageNoTab">
+      <h1 class="no-tabs">NO TABS YET! :/</h1>
+    </div>
 
-    <!-- Modal: settings -->
-    <div id="settingsModal" class="reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
-      <h2 id="modalTitle">FOOBAR settings</h2>
-      <a class="close-reveal-modal" aria-label="Close">&#215;</a>
+    <!-- Grid Page: noresult -->
+    <div class="tab-results row" id="gridPageNoResult">
+      <h3 class="search-query">you searched for: <em id="searchGridResult"></em>
+      <h1>NO RESULTS</h1>
+    </div>
 
-      <div data-alert class="alert-box warning round" id="filterAlert">
-        <strong>Warning!</strong> The filter URL must start with http:// or https://
-      </div>
+    <!-- Grid Page -->
+    <div id="gridPageRest" class="overview-list row">
+    </div>
 
-      <form id="settingsForm">
-        <label for="filter">URL filter</label>
-        <input id="filter" type="text" placeholder="http://bugzilla.mozilla.org" />
-      </form>
+    <!-- listPage -->
+    <div class="content-wrapper row collapse" id="listPage">
+      <aside id="tabs" class="large-2 columns">
+        <div class="row">
+          <div class="large-12 columns" id="listPageList"></div>
+        </div>
+      </aside>
+      <div id="content" class="large-10 columns">
+        <div class="url-toolbar">
+          <ul>
+            <li><a href="" class="icon-rewind" id="pageBack"></a></li>
+            <li><a href="" class="icon-fast-forward" id="pageForward"></a></li>
+            <li class="url-readonly"><input type="text" id="pageURL" value="" placeholder="Address" readonly=""></li>
+            <li><a href="" class="icon-reload" id="pageReload"></a></li>
+          </ul>
+        </div>
+        <div id="iframe-content">
+          <iframe src="about:blank"></iframe>
+        </div>
       </div>
     </div>
 
     <script src="js/vendor/jquery.js"></script>
     <script src="js/foundation.min.js"></script>
+    <script src="js/happy.js"></script>
+
     <script>
       $(document).foundation();
+
+      $('.button-search').bind('oanimationend animationend webkitAnimationEnd', function() { 
+         $(this).toggleClass('icon-search').toggleClass('icon-repeat');
+      });
     </script>
   </body>
 </html>
