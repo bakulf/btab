@@ -2,52 +2,64 @@
 <html>
   <head>
     <title>FOOBAR</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <link href="css/main.css" rel="stylesheet" media="screen">
-    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/foundation.css" />
+    <script src="js/vendor/modernizr.js"></script>
+    <link href="css/main.css" rel="stylesheet" media="screen" />
+    <meta charset="utf-8" />
   </head>
   <body>
 
-    <div class="navbar">
-      <div class="navbar-inner">
-        <a class="brand" href="#">FOOBAR</a>
-        <ul class="nav pull-right">
-          <li><a href="#" id="settingsAnchor" alt="Settings">
-            <img src="img/settings.svg" /></a></li>
+    <div class="fixed">
+      <nav class="top-bar" data-topbar role="navigation">
+        <ul class="left title-area">
+          <li class="name">
+            <h1><a class="brand" href="" id="titleAnchor">FOOBAR</a></h1>
+          </li>
         </ul>
-        <form class="navbar-search pull-right">
-          <input id="search" class="search-query" type="text" placeholder="Search" />
-        </form>
-      </div>
+
+        <section class="top-bar-section">
+          <ul class="right">
+            <li class="has-form">
+              <div class="row collapse">
+                <div class="large-12 small-9 columns">
+                  <input id="search" type="text" placeholder="Search" />
+                </div>
+              </div>
+            </li>
+            <li class="divider"></li>
+            <li class="has-form">
+              <a href="#" class="button" id="settingsAnchor" title="Settings">
+                <img src="img/settings.svg" />
+              </a>
+            </li>
+          </ul>
+        </section>
+      </nav>
     </div>
 
-    <div class="container" id="container"></div>
+    <div id="container"></div>
 
     <!-- Modal: settings -->
-    <div class="modal hide fade" id="settingsModal" tabindex="-1"
-         role="dialog" aria-labelledby="settingsModalLabel" aria-hidden="true">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3>FOOBAR settings</h3>
+    <div id="settingsModal" class="reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+      <h2 id="modalTitle">FOOBAR settings</h2>
+      <a class="close-reveal-modal" aria-label="Close">&#215;</a>
+
+      <div data-alert class="alert-box warning round" id="filterAlert">
+        <strong>Warning!</strong> The filter URL must start with http:// or https://
       </div>
-      <div class="modal-body">
 
-        <div class="hide alert alert-error" id="filterAlert">
-          <strong>Warning!</strong> The filter URL must start with http:// or https://
-        </div>
-
-        <form class="form-horizontal" id="settingsForm">
-          <div class="control-group">
-            <label class="control-label" for="filter">URL filter</label>
-            <div class="controls">
-            <input id="filter" type="text" placeholder="http://bugzilla.mozilla.org" />
-          </div>
-        </form>
+      <form id="settingsForm">
+        <label for="filter">URL filter</label>
+        <input id="filter" type="text" placeholder="http://bugzilla.mozilla.org" />
+      </form>
       </div>
     </div>
 
-    <script src="js/jquery.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
+    <script src="js/vendor/jquery.js"></script>
+    <script src="js/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+    </script>
   </body>
 </html>

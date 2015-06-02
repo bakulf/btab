@@ -12,3 +12,8 @@
 .well {
     box-sizing: border-box;
 }
+
+iframe {
+  width: 100%;
+  height: 100%;
+}
