@@ -14,7 +14,7 @@ button {
 }
 
 header {
-  border-bottom:1px solid $primary;
+  border-bottom:1px solid $secondary;
   height: 60px;
   line-height: 60px;
   img {
@@ -43,7 +43,7 @@ header {
     height: 60px;
     line-height: 60px;
     .form-item {
-      border:1px solid $primary;
+      border:1px solid $secondary;
       @include vertical-align;
       margin:0;
       padding:0;
@@ -70,7 +70,7 @@ header {
         margin-top:2px;
         float: left;
         display: block;
-        background: $primary;
+        background: $secondary;
       }
 
       .button-search {
@@ -198,7 +198,7 @@ header {
     }
     &:active {
       background:$primary;
-      border:1px solid $primary;
+      border:1px solid $secondary;
       color: white;
       h2 {
         color: white;
@@ -208,7 +208,7 @@ header {
       }
       &:hover {
         background:$primary;
-        border:1px solid $primary;
+        border:1px solid $secondary;
       }
     }
   }
@@ -289,13 +289,14 @@ header {
     background:white;
     padding-top:20px;
     overflow: auto;
-    border-right:1px solid $primary;
+    border-right:1px solid $secondary;
     .single-item {
       border:1px solid #ccc;
       @include border-radius(5px);
       margin-bottom:20px;
       min-height: 140px;
       position:relative;
+      cursor: pointer;
       &.active {
         position: relative;
         &:after {
@@ -355,6 +356,7 @@ header {
         overflow: hidden;
       }
       &:hover {
+        cursor: pointer;
         background:$secondary;
         border-color:$secondary;
         color: white;
@@ -389,7 +391,7 @@ header {
       }
       &:active {
         background:$primary;
-        border:1px solid $primary;
+        border:1px solid $secondary;
         color: white;
         h2 {
           color: white;
@@ -399,13 +401,13 @@ header {
         }
         &:hover {
           background:$primary;
-          border:1px solid $primary;
+          border:1px solid $secondary;
         }
       }
     }
   }
   .url-toolbar {
-    border-bottom:1px solid $primary;
+    border-bottom:1px solid $secondary;
     height: 30px;
 
     ul {
@@ -414,11 +416,11 @@ header {
         list-style: none;
         float:left;
         height: 30px;
-        border-right:1px solid $primary;
+        border-right:1px solid $secondary;
         
         &:last-child {
           border-right:0;
-          border-left: 1px solid $primary;
+          border-left: 1px solid $secondary;
           float: right;
         }
         &.url-readonly {
