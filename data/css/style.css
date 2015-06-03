@@ -163,7 +163,7 @@ button {
   font-size: 18px; }
 
 header {
-  border-bottom: 1px solid #EF4036;
+  border-bottom: 1px solid #333333;
   height: 60px;
   line-height: 60px; }
   header img {
@@ -184,7 +184,7 @@ header {
     height: 60px;
     line-height: 60px; }
     header form .form-item {
-      border: 1px solid #EF4036;
+      border: 1px solid #333333;
       position: relative;
       top: 50%;
       -webkit-transform: translate(0, -50%);
@@ -212,7 +212,7 @@ header {
         margin-top: 2px;
         float: left;
         display: block;
-        background: #EF4036; }
+        background: #333333; }
       header form .form-item .button-search {
         position: relative;
         background: none;
@@ -322,7 +322,7 @@ header {
             color: #EF4036; }
     .overview-list .single-item:active {
       background: #EF4036;
-      border: 1px solid #EF4036;
+      border: 1px solid #333333;
       color: white; }
       .overview-list .single-item:active h2 {
         color: white; }
@@ -330,7 +330,7 @@ header {
         color: white; }
       .overview-list .single-item:active:hover {
         background: #EF4036;
-        border: 1px solid #EF4036; }
+        border: 1px solid #333333; }
 
 .settings {
   margin-top: 40px; }
@@ -393,7 +393,7 @@ header {
   background: white;
   padding-top: 20px;
   overflow: auto;
-  border-right: 1px solid #EF4036; }
+  border-right: 1px solid #333333; }
   .content-wrapper aside h2, .content-wrapper aside h3 {
     margin: 0 20px 20px 20px;
     font-family: "Georgia", serif;
@@ -409,6 +409,7 @@ header {
     margin-bottom: 20px;
     min-height: 140px;
     position: relative;
+    cursor: pointer;
     position: relative;
     border: 1px solid #EF4036;
     -webkit-border-radius: 5px;
@@ -470,6 +471,7 @@ header {
       line-height: 24px;
       overflow: hidden; }
     .content-wrapper aside .single-item:hover {
+      cursor: pointer;
       background: #333333;
       border-color: #333333;
       color: white; }
@@ -501,7 +503,7 @@ header {
             color: #EF4036; }
     .content-wrapper aside .single-item:active {
       background: #EF4036;
-      border: 1px solid #EF4036;
+      border: 1px solid #333333;
       color: white; }
       .content-wrapper aside .single-item:active h2 {
         color: white; }
@@ -509,9 +511,9 @@ header {
         color: white; }
       .content-wrapper aside .single-item:active:hover {
         background: #EF4036;
-        border: 1px solid #EF4036; }
+        border: 1px solid #333333; }
 .content-wrapper .url-toolbar {
-  border-bottom: 1px solid #EF4036;
+  border-bottom: 1px solid #333333;
   height: 30px; }
   .content-wrapper .url-toolbar ul {
     margin: 0; }
@@ -519,10 +521,10 @@ header {
       list-style: none;
       float: left;
       height: 30px;
-      border-right: 1px solid #EF4036; }
+      border-right: 1px solid #333333; }
       .content-wrapper .url-toolbar ul li:last-child {
         border-right: 0;
-        border-left: 1px solid #EF4036;
+        border-left: 1px solid #333333;
         float: right; }
       .content-wrapper .url-toolbar ul li.url-readonly {
         border-right: 0; }
