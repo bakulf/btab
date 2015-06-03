@@ -316,8 +316,17 @@ let Controller = {
     this.showIframe();
     $("#pageURL").attr('value', this._activeURL);
 
-    // TODO: canGoBack
-    // TODO: canGoForward
+    if (this.canGoBack()) {
+      $("#pageBack").removeClass('disabled');
+    } else {
+      $("#pageBack").addClass('disabled');
+    }
+
+    if (this.canGoForward()) {
+      $("#pageForward").removeClass('disabled');
+    } else {
+      $("#pageForward").addClass('disabled');
+    }
   },
 
   resize: function() {
