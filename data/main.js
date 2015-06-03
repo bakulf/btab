@@ -256,16 +256,18 @@ let Controller = {
 
     if (!iframe) {
       iframe = document.createElement('iframe');
-      iframe.src = this._activeURL;
       container.appendChild(iframe);
     }
 
+    this.resize();
+
+    if (iframe.src != this._activeURL) {
+      iframe.src = this._activeURL;
+    }
 
     while (container.children.length > parseInt(this._filterMaxPages.value)) {
       container.removeChild(container.firstChild);
     }
-
-    this.resize();
   },
 
   listPage: function(aPartial) {
@@ -275,10 +277,11 @@ let Controller = {
       return;
     }
 
-    $("#pageURL").attr('value', this._activeURL);
-    this.showIframe();
+    let visible = $("#listPage").is(":visible");
+    this.showPage('listPage');
+    this.updateListPage();
 
-    if (!aPartial || !$("#listPage").is(":visible")) {
+    if (!aPartial || !visible) {
       let container = document.getElementById('listPageList');
       while(container.firstChild) {
         container.removeChild(container.firstChild);
@@ -306,9 +309,6 @@ let Controller = {
         let page = this.createPage(pages[i]);
         container.appendChild(page);
       }
-
-      this.showPage('listPage');
-      this.resize();
     }
   },
 
@@ -403,12 +403,22 @@ let Controller = {
   },
 
   goBack: function() {
-    this._activeURL = this.canGoBack();
+    let url = this.canGoBack();
+    if (!url) {
+      return;
+    }
+
+    this._activeURL = url;
     this.updateListPage();
   },
 
   goForward: function() {
-    this._activeURL = this.canGoForward();
+    let url = this.canGoForward();
+    if (!url) {
+      return;
+    }
+
+    this._activeURL = url;
     this.updateListPage();
   },
 
