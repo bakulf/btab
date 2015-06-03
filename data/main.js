@@ -3,6 +3,7 @@
 let Controller = {
   _filterURL: null,
   _filterName: null,
+  _filterMaxPages: 10,
 
   _search: null,
   _searchTimeout: null,
@@ -13,6 +14,7 @@ let Controller = {
   init: function() {
     this._filterURL = document.getElementById('filterURL');
     this._filterName = document.getElementById('filterName');
+    this._filterMaxPages = document.getElementById('filterMaxPages');
 
     this._search = document.getElementById('search');
     this._search.onkeypress = function() {
@@ -38,6 +40,14 @@ let Controller = {
             var filter = document.getElementById("filterURL");
             return filter.value.indexOf('http://') == 0 ||
                    filter.value.indexOf('https://') == 0;
+          }
+        },
+        '#filterMaxPages': {
+          required: true,
+          message: 'It has to be higher then 0',
+          test: function() {
+            var filter = document.getElementById("filterMaxPages");
+            return parseInt(filter.value) > 0;
           }
         }
       },
@@ -126,10 +136,16 @@ let Controller = {
     this.refreshDataNeeded();
   },
 
-  settingsSave: function() {
+  updateTitle: function() {
     $("#filterTitleName").text(this._filterName.value);
+    $("title").text("B:Tab - " + this._filterName.value);
+  },
+
+  settingsSave: function() {
+    this.updateTitle();
     self.port.emit('filterChanged', { url: this._filterURL.value,
-                                      name: this._filterName.value });
+                                      name: this._filterName.value,
+                                      maxPages: parseInt(this._filterMaxPages.value) });
     this.mainPage();
   },
 
@@ -137,7 +153,8 @@ let Controller = {
     if (this._data.match != '' || this._data.name != '') {
       this._filterURL.value = this._data.match;
       this._filterName.value = this._data.name;
-      $("#filterTitleName").text(this._filterName.value);
+      this._filterMaxPages.value = this._data.maxPages;
+      this.updateTitle();
     } else {
       this.settings();
       return;
@@ -224,6 +241,35 @@ let Controller = {
     this.showPage('gridPageRest');
   },
 
+  showIframe: function() {
+    let container = document.getElementById('iframe-content');
+
+    let iframe;
+    for (let i = 0; i < container.children.length; ++i) {
+      if (container.children[i].src == this._activeURL) {
+        $(container.children[i]).show();
+        iframe = container.children[i];
+      } else {
+        $(container.children[i]).hide();
+      }
+    }
+
+    if (!iframe) {
+      iframe = document.createElement('iframe');
+      iframe.src = this._activeURL;
+    } else {
+      container.removeChild(iframe);
+    }
+
+    container.appendChild(iframe);
+
+    while (container.children.length > parseInt(this._filterMaxPages.value)) {
+      container.removeChild(container.firstChild);
+    }
+
+    this.resize();
+  },
+
   listPage: function() {
     if (this._data.pages.length == 0) {
       dump("BTAB: This seems a bug!\n");
@@ -236,8 +282,8 @@ let Controller = {
       container.removeChild(container.firstChild);
     }
 
-    $("iframe").attr('src', this._activeURL);
     $("#pageURL").attr('value', this._activeURL);
+    let iframe = this.showIframe();
 
     let pages = this.filterPages();
 
@@ -267,7 +313,7 @@ let Controller = {
   },
 
   updateListPage: function() {
-    $("iframe").attr('src', this._activeURL);
+    this.showIframe();
     $("#pageURL").attr('value', this._activeURL);
 
     // TODO: canGoBack
