@@ -415,7 +415,7 @@ header {
         float:left;
         height: 30px;
         border-right:1px solid $primary;
-
+        
         &:last-child {
           border-right:0;
           border-left: 1px solid $primary;
@@ -442,7 +442,10 @@ header {
           text-align: center;
           line-height:28px;
 
-
+          &.disabled {
+            opacity: 0.2;
+            cursor: default;
+          }
         }
       }
     }
