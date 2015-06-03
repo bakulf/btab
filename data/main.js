@@ -257,11 +257,11 @@ let Controller = {
     if (!iframe) {
       iframe = document.createElement('iframe');
       iframe.src = this._activeURL;
-    } else {
-      container.removeChild(iframe);
+      container.appendChild(iframe);
+    } else if (iframe != container.firstChild) {
+      container.insertBefore(iframe);
     }
 
-    container.appendChild(iframe);
 
     while (container.children.length > parseInt(this._filterMaxPages.value)) {
       container.removeChild(container.firstChild);
@@ -371,12 +371,14 @@ let Controller = {
     li.onclick = function(e) {
       self.port.emit('closeURL', aPage.url);
       e.stopPropagation();
+      return false;
     }.bind(this);
 
     item.onclick = function(e) {
       this._activeURL = aPage.url;
       this.listPage();
       e.stopPropagation();
+      return false;
     }.bind(this);
 
     return item;
