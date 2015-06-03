@@ -5,6 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>B:TAB</title>
+    <link rel="shortcut icon" href="img/icon-64.png" />
     <link rel="stylesheet" href="css/foundation.css" />
     <link rel="stylesheet" href="css/style.css" />
     <script src="js/vendor/modernizr.js"></script>
@@ -38,12 +39,17 @@
         <form id="settingsForm">
           <div class="form-item">
             <label for="filterName">Choose a filter name</label>
-            <input id="filterName" type="text" name="title" value="" placeholder="Filter name">
+            <input id="filterName" type="text" value="" placeholder="Filter name">
             <span class="small-desc">TODO</span>
           </div>
           <div class="form-item">
-            <label for="filterURL">Choose your filter URl</label>
-            <input id="filterURL"  type="text" name="filter" value="" placeholder="http://www.example.com">
+            <label for="filterURL">Choose your filter URL</label>
+            <input id="filterURL"  type="text" value="" placeholder="http://www.example.com">
+            <span class="small-desc">TODO</span>
+          </div>
+          <div class="form-item">
+            <label for="filterMaxPages">Number of pages in memory</label>
+            <input id="filterMaxPages"  type="number" value="10" placeholder="10">
             <span class="small-desc">TODO</span>
           </div>
           <button type="submit">SAVE</button>
@@ -82,9 +88,7 @@
             <li><a href="" class="icon-reload" id="pageReload"></a></li>
           </ul>
         </div>
-        <div id="iframe-content">
-          <iframe src="about:blank"></iframe>
-        </div>
+        <div id="iframe-content"></div>
       </div>
     </div>
 
