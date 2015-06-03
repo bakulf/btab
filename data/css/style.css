@@ -446,13 +446,6 @@ header {
           color: #EF4036; }
         .content-wrapper aside .single-item .toolbar.active li.icon-trash {
           display: none; }
-    .content-wrapper aside .single-item:after {
-      content: '…';
-      position: absolute;
-      bottom: 5px;
-      right: 10px;
-      font-size: 20px;
-      color: #999; }
     .content-wrapper aside .single-item h2 {
       -webkit-transition: all 0.2s ease-in-out;
       -moz-transition: all 0.2s ease-in-out;

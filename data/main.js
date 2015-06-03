@@ -161,7 +161,7 @@ let Controller = {
     }
 
     if (this._activeURL) {
-      this.listPage();
+      this.listPage(false);
     } else {
       this.gridPage();
     }
@@ -258,8 +258,6 @@ let Controller = {
       iframe = document.createElement('iframe');
       iframe.src = this._activeURL;
       container.appendChild(iframe);
-    } else if (iframe != container.firstChild) {
-      container.insertBefore(iframe);
     }
 
 
@@ -270,46 +268,48 @@ let Controller = {
     this.resize();
   },
 
-  listPage: function() {
+  listPage: function(aPartial) {
     if (this._data.pages.length == 0) {
       dump("BTAB: This seems a bug!\n");
       this.mainPage();
       return;
     }
 
-    let container = document.getElementById('listPageList');
-    while(container.firstChild) {
-      container.removeChild(container.firstChild);
-    }
-
     $("#pageURL").attr('value', this._activeURL);
-    let iframe = this.showIframe();
+    this.showIframe();
 
-    let pages = this.filterPages();
+    if (!aPartial || !$("#listPage").is(":visible")) {
+      let container = document.getElementById('listPageList');
+      while(container.firstChild) {
+        container.removeChild(container.firstChild);
+      }
 
-    if (this._search.value != "") {
-      let h = document.createElement('h3');
-      h.setAttribute('class', 'search-query');
-      h.appendChild(document.createTextNode('your searched for: '));
-      container.appendChild(h);
+      let pages = this.filterPages();
 
-      let em = document.createElement('em');
-      em.appendChild(document.createTextNode(this._search.value));
-      h.appendChild(em);
-    } else {
-      let h = document.createElement('h3');
-      h.setAttribute('class', 'search-query');
-      h.appendChild(document.createTextNode('Your tabs'));
-      container.appendChild(h);
+      if (this._search.value != "") {
+        let h = document.createElement('h3');
+        h.setAttribute('class', 'search-query');
+        h.appendChild(document.createTextNode('your searched for: '));
+        container.appendChild(h);
+
+        let em = document.createElement('em');
+        em.appendChild(document.createTextNode(this._search.value));
+        h.appendChild(em);
+      } else {
+        let h = document.createElement('h3');
+        h.setAttribute('class', 'search-query');
+        h.appendChild(document.createTextNode('Your tabs'));
+        container.appendChild(h);
+      }
+
+      for (let i = 0; i < pages.length; ++i) {
+        let page = this.createPage(pages[i]);
+        container.appendChild(page);
+      }
+
+      this.showPage('listPage');
+      this.resize();
     }
-
-    for (let i = 0; i < pages.length; ++i) {
-      let page = this.createPage(pages[i]);
-      container.appendChild(page);
-    }
-
-    this.showPage('listPage');
-    this.resize();
   },
 
   updateListPage: function() {
@@ -376,7 +376,7 @@ let Controller = {
 
     item.onclick = function(e) {
       this._activeURL = aPage.url;
-      this.listPage();
+      this.listPage(true);
       e.stopPropagation();
       return false;
     }.bind(this);

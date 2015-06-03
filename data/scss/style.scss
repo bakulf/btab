@@ -333,13 +333,13 @@ header {
       @include border-radius(5px);
       margin-bottom:20px;
       @include transition(.2s);
-      &:after {
-        content:'…';
-        position: absolute;
-        bottom:5px;
-        right:10px;
-        font-size: 20px;
-        color: #999;
+      //&:after {
+      //  content:'…';
+      //  position: absolute;
+      //  bottom:5px;
+      //  right:10px;
+      //  font-size: 20px;
+      //  color: #999;
       }
       h2 {
         @include transition(.2s);
