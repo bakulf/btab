@@ -1,5 +1,6 @@
 $orange: #EF4036;
 $grey: #333333;
+$light-grey: #CCCCCC;
 
 $primary: $orange;
 $secondary: $grey;
@@ -117,100 +118,8 @@ header {
   }
   margin-top:40px;
   .single-item {
-    .toolbar {
-      display: none;
-      &.active {
-        display: block;
-        margin:0;
-        padding:0;
-        margin:10px;
-
-        li.icon-star {
-          display: block;
-          font-size: 20px;
-          color: $primary;
-        }
-
-        li.icon-trash {
-          display: none;
-        }
-      }
-    }
-    position: relative;
-    border:1px solid $primary;
-    @include border-radius(5px);
-    margin-bottom:20px;
-    height: 240px;
-    @include transition(.2s);
-    // &:after {
-    //   content:'…';
-    //   position: absolute;
-    //   bottom:5px;
-    //   right:10px;
-    //   font-size: 20px;
-    //   color: #999;
-    // }
-    h2 {
-      @include transition(.2s);
-      font-family: "Georgia", serif;
-      font-size: 16px;
-      font-style:italic;
-      position:absolute;
-      bottom:5px;
-      left:10px;
-      max-height: 70px;
-      max-width:315px;
-      line-height:24px;
-      overflow: hidden;
-    }
-    &:hover {
-      background:$secondary;
-      border-color:$secondary;
-      color: white;
-      h2 {
-        color: white;
-      }
-      :after {
-        color: white;
-      }
-      .toolbar {
-        display: block;
-        margin:0;
-        padding:0;
-        margin:10px;
-        li {
-          margin:0;
-          padding:0;
-          float: left;
-          list-style: none;
-          font-size: 20px;
-          display: block !important;
-          cursor: pointer;
-          @include transition(.2s);
-          &:last-child {
-            float: right;
-          }
-          &:hover {
-            color: $primary;
-          }
-        }
-      }
-    }
-    &:active {
-      background:$primary;
-      border:1px solid $secondary;
-      color: white;
-      h2 {
-        color: white;
-      }
-      :after {
-        color: white;
-      }
-      &:hover {
-        background:$primary;
-        border:1px solid $secondary;
-      }
-    }
+    min-height: 240px;
+    left:10px;
   }
 }
 
@@ -249,7 +158,7 @@ header {
     padding:0;
     @include vertical-align;
     &.no-tabs {
-      color: #CCC;
+      color: $light-grey;
     }
   }
 
@@ -290,121 +199,7 @@ header {
     padding-top:20px;
     overflow: auto;
     border-right:1px solid $secondary;
-    .single-item {
-      border:1px solid #ccc;
-      @include border-radius(5px);
-      margin-bottom:20px;
-      min-height: 140px;
-      position:relative;
-      cursor: pointer;
-      &.active {
-        position: relative;
-        &:after {
-          width: 0;
-          height: 0;
-          border-style: solid;
-          border-width: 20px 20px 20px 0;
-          border-color: transparent $primary transparent transparent;
-          position:absolute;
-          right:-16px;
-          top:50px;
-        }
-      }
-      .toolbar {
-        display: none;
-        &.active {
-          display: block;
-          margin:0;
-          padding:0;
-          margin:10px;
 
-          li.icon-star {
-            display: block;
-            font-size: 20px;
-            color: $primary;
-          }
-
-          li.icon-trash {
-            display: none;
-          }
-        }
-      }
-      position: relative;
-      border:1px solid $primary;
-      @include border-radius(5px);
-      margin-bottom:20px;
-      @include transition(.2s);
-      //&:after {
-      //  content:'…';
-      //  position: absolute;
-      //  bottom:5px;
-      //  right:10px;
-      //  font-size: 20px;
-      //  color: #999;
-      }
-      h2 {
-        @include transition(.2s);
-        font-family: "Georgia", serif;
-        font-size: 16px;
-        font-style:italic;
-        position:absolute;
-        bottom:5px;
-        left:10px;
-        max-height: 70px;
-        max-width:315px;
-        line-height:24px;
-        overflow: hidden;
-      }
-      &:hover {
-        cursor: pointer;
-        background:$secondary;
-        border-color:$secondary;
-        color: white;
-        h2 {
-          color: white;
-        }
-        :after {
-          color: white;
-        }
-        .toolbar {
-          display: block;
-          margin:0;
-          padding:0;
-          margin:10px;
-          li {
-            margin:0;
-            padding:0;
-            float: left;
-            list-style: none;
-            font-size: 20px;
-            display: block !important;
-            cursor: pointer;
-            @include transition(.2s);
-            &:last-child {
-              float: right;
-            }
-            &:hover {
-              color: $primary;
-            }
-          }
-        }
-      }
-      &:active {
-        background:$primary;
-        border:1px solid $secondary;
-        color: white;
-        h2 {
-          color: white;
-        }
-        :after {
-          color: white;
-        }
-        &:hover {
-          background:$primary;
-          border:1px solid $secondary;
-        }
-      }
-    }
   }
   .url-toolbar {
     border-bottom:1px solid $secondary;
@@ -469,6 +264,150 @@ header {
   }
 }
 
+// SINGLE ITEM
+
+.single-item {
+  text-align: center;
+  border:1px solid $light-grey;
+  @include border-radius(5px);
+  margin-bottom:20px;
+  min-height: 140px;
+  position:relative;
+  cursor: pointer;
+  &.unvisited {
+    border-color:$primary;
+  }
+  &.active {
+    position: relative;
+    &:after {
+      content:'';
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 20px 20px 20px 0;
+      border-color: transparent $secondary transparent transparent;
+      position:absolute;
+      right:-16px;
+      top:50px;
+    }
+  }
+  .single-item-title {
+    text-align: left;
+    font-size: 16px;
+  }
+  .toolbar {
+    display: block;
+    margin:0;
+    padding:0;
+    margin:10px;
+    li {
+      margin:0;
+      padding:0;
+      float: left;
+      list-style: none;
+      font-size: 20px;
+      display: block !important;
+      cursor: pointer;
+      @include transition(.2s);
+      img {
+        position:absolute;
+        top:10px;
+      }
+      &:first-child {
+        width:48%;
+        text-align: left;
+      }
+      &:last-child {
+        float: right;
+      }
+      &:hover {
+        color: $primary;
+      }
+    }
+
+    &.active {
+      display: block;
+      margin:0;
+      padding:0;
+      margin:10px;
+
+      li.icon-star {
+        display: block;
+        font-size: 20px;
+        color: $primary;
+      }
+
+      li.icon-trash {
+        display: none;
+      }
+    }
+  }
+  position: relative;
+  @include border-radius(5px);
+  margin-bottom:20px;
+  @include transition(.2s);
+  h2 {
+    @include transition(.2s);
+    font-family: "Georgia", serif;
+    font-size: 14px;
+    font-style:italic;
+    position:absolute;
+    bottom:5px;
+    left:5px;
+    max-height: 70px;
+    max-width:315px;
+    line-height:24px;
+    overflow: hidden;
+  }
+  &:hover {
+    cursor: pointer;
+    border-color:$secondary;
+    color: $secondary;
+    h2 {
+      color: $secondary;
+    }
+    :after {
+      color: $secondary;
+    }
+    .toolbar {
+      display: block;
+      margin:0;
+      padding:0;
+      margin:10px;
+      li {
+        margin:0;
+        padding:0;
+        float: left;
+        list-style: none;
+        font-size: 20px;
+        display: block !important;
+        cursor: pointer;
+        @include transition(.2s);
+        &:last-child {
+          float: right;
+        }
+        &:hover {
+          color: $primary;
+        }
+      }
+    }
+  }
+  &:active {
+    background:$primary;
+    border:1px solid $secondary;
+    color: white;
+    h2 {
+      color: white;
+    }
+    :after {
+      color: white;
+    }
+    &:hover {
+      background:$primary;
+      border:1px solid $secondary;
+    }
+  }
+}
 
 @-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
 @-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }

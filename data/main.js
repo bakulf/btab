@@ -1,6 +1,6 @@
 /* See license.txt for terms of usage */
 
-const DEFAULT_ICONURL = "TODO.png";
+const DEFAULT_ICONURL = "img/default.png";
 
 let Controller = {
   _filterURL: null,
@@ -534,15 +534,18 @@ let Controller = {
     li.setAttribute('class', 'item icon-star');
     ul.appendChild(li);
 
-    let img = document.createElement('img');
-    img.setAttribute('src', aPage.iconUrl ? aPage.iconUrl : DEFAULT_ICONURL)
-    item.appendChild(img);
-
-    li.onclick = function(e) {
+    li.onclick = function() {
       this.starredURL(aPage.url);
-      e.stopPropagation();
       return false;
     }.bind(this);
+
+    li = document.createElement('li');
+    ul.appendChild(li);
+
+    let img = document.createElement('img');
+    img.setAttribute('src', aPage.iconUrl ? aPage.iconUrl : DEFAULT_ICONURL);
+    img.setAttribute('class', 'icon');
+    li.appendChild(img);
 
     li = document.createElement('li');
     li.setAttribute('class', 'item icon-trash');
