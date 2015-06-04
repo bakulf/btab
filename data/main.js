@@ -1,5 +1,7 @@
 /* See license.txt for terms of usage */
 
+const DEFAULT_ICONURL = "TODO.png";
+
 let Controller = {
   _filterURL: null,
   _filterName: null,
@@ -88,6 +90,10 @@ let Controller = {
       }
 
       this.refreshDataNeeded();
+    }.bind(this));
+
+    self.port.on('iconReady', function(aData) {
+      this.iconReady(aData.url, aData.iconUrl);
     }.bind(this));
 
     document.addEventListener('visibilitychange', function() {
@@ -275,6 +281,28 @@ let Controller = {
         // What about duplicates?!?
       }
     });
+
+    if (aOld == this._activeURL) {
+      this._activeURL = aNew;
+      this.updateBrowserController();
+    }
+  },
+
+  iconChanged: function(aUrl, aIconUrl) {
+    self.port.emit('iconChanged', { url: aUrl, iconUrl: aIconUrl });
+
+    for (let i = 0; i < this._data.pages.length; ++i) {
+      if (this._data.pages[i].url == aUrl) {
+        this._data.pages[i].iconUrl = aIconUrl;
+        break;
+      }
+    }
+
+    $(".single-item").each(function() {
+      if ($(this).attr("data-url") == aUrl) {
+        $(this).find('img').attr('src', aIconUrl);
+      }
+    });
   },
 
   titleChanged: function(aUrl, aTitle) {
@@ -296,7 +324,7 @@ let Controller = {
 
   closeURL: function(aUrl) {
     self.port.emit('closeURL', aUrl);
-    for (let i = 1; i < this._data.pages.length; ++i) {
+    for (let i = 0; i < this._data.pages.length; ++i) {
       if (this._data.pages[i].url == aUrl) {
         this._data.pages.splice(i, 1);
         break;
@@ -308,6 +336,16 @@ let Controller = {
         $(this).remove();
       }
     });
+
+    $("iframe").each(function() {
+      if ($(this).attr('src') == aUrl) {
+        $(this).remove();
+      }
+    });
+
+    if (this._activeURL == aUrl) {
+      this.mainPage();
+    }
   },
 
   loadingStart: function(aIframe) {
@@ -316,6 +354,26 @@ let Controller = {
 
   loadingEnd: function(aIframe) {
     $("#pageReload").removeClass('icon-repeat');
+  },
+
+  maybeVisited: function() {
+    for (let i = 0; i < this._data.pages.length; ++i) {
+      if (this._data.pages[i].url == this._activeURL) {
+        if (!this._data.pages[i].visited) {
+          this._data.pages[i].visited = true;
+
+          let url = this._activeURL;
+          $(".single-item").each(function() {
+            if ($(this).attr("data-url") == url) {
+              $(this).removeClass('unvisited');
+            }
+          });
+
+          self.port.emit('urlVisited', this._activeURL);
+        }
+        break;
+      }
+    }
   },
 
   // UI methods ---------------------------------------------------------------
@@ -336,9 +394,13 @@ let Controller = {
         url = a.detail;
         if (this._activeURL == url) {
           this._activeURL = a.detail;
-          this.updateBrowserControler();
+          this.updateBrowserController();
         }
       }
+    }.bind(this));
+
+    iframe.addEventListener('mozbrowsericonchange', function(a) {
+      this.iconChanged(url, a.detail.href);
     }.bind(this));
 
     iframe.addEventListener('mozbrowsertitlechange', function(a) {
@@ -436,7 +498,7 @@ let Controller = {
 
   createPage: function(aPage) {
     let item = document.createElement('div');
-    item.setAttribute('class', 'single-item');
+    item.setAttribute('class', 'single-item' + (aPage.visited ? '' : ' unvisited'));
     item.setAttribute('data-url', aPage.url);
 
     let title = document.createElement('h2');
@@ -451,6 +513,10 @@ let Controller = {
     let li = document.createElement('li');
     li.setAttribute('class', 'item icon-star');
     ul.appendChild(li);
+
+    let img = document.createElement('img');
+    img.setAttribute('src', aPage.iconUrl ? aPage.iconUrl : DEFAULT_ICONURL)
+    item.appendChild(img);
 
     li.onclick = function() {
       // TODO
@@ -491,6 +557,8 @@ let Controller = {
   },
 
   updateBrowserController: function() {
+    this.maybeVisited();
+
     this.showIframe();
     $("#pageURL").attr('value', this._activeURL);
 
@@ -527,6 +595,20 @@ let Controller = {
     } else {
       this.gridPage();
     }
+  },
+
+  iconReady: function(aUrl, aIconUrl) {
+    for (let i = 0; i < this._data.pages.length; ++i) {
+      if (this._data.pages[i].url == aUrl) {
+        this._data.pages[i].iconUrl = aIconUrl;
+      }
+    }
+
+    $(".single-item").each(function() {
+      if ($(this).attr("data-url") == aUrl) {
+        $(this).find('img').attr('src', aIconUrl);
+      }
+    });
   },
 
   filterPages: function() {
