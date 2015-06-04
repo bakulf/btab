@@ -448,6 +448,12 @@ header {
             opacity: 0.2;
             cursor: default;
           }
+
+          &.icon-repeat {
+            -webkit-animation:spin 0.5s linear infinite;
+            -moz-animation:spin 0.5s linear infinite;
+            animation:spin 0.5s linear infinite;
+          }
         }
       }
     }

@@ -540,6 +540,10 @@ header {
         .content-wrapper .url-toolbar ul li a.disabled {
           opacity: 0.2;
           cursor: default; }
+        .content-wrapper .url-toolbar ul li a.icon-repeat {
+          -webkit-animation: spin 0.5s linear infinite;
+          -moz-animation: spin 0.5s linear infinite;
+          animation: spin 0.5s linear infinite; }
 .content-wrapper iframe {
   border: none; }
 
