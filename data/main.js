@@ -92,10 +92,6 @@ let Controller = {
       this.refreshDataNeeded();
     }.bind(this));
 
-    self.port.on('iconReady', function(aData) {
-      this.iconReady(aData.url, aData.iconUrl);
-    }.bind(this));
-
     document.addEventListener('visibilitychange', function() {
       if (document.visibilityState == 'visible') {
         self.port.emit('dataNeeded');
@@ -595,20 +591,6 @@ let Controller = {
     } else {
       this.gridPage();
     }
-  },
-
-  iconReady: function(aUrl, aIconUrl) {
-    for (let i = 0; i < this._data.pages.length; ++i) {
-      if (this._data.pages[i].url == aUrl) {
-        this._data.pages[i].iconUrl = aIconUrl;
-      }
-    }
-
-    $(".single-item").each(function() {
-      if ($(this).attr("data-url") == aUrl) {
-        $(this).find('img').attr('src', aIconUrl);
-      }
-    });
   },
 
   filterPages: function() {
