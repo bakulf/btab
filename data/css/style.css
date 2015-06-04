@@ -544,8 +544,25 @@ header {
           -webkit-animation: spin 0.5s linear infinite;
           -moz-animation: spin 0.5s linear infinite;
           animation: spin 0.5s linear infinite; }
-.content-wrapper iframe {
-  border: none; }
+.content-wrapper #iframe-content {
+  position: relative; }
+  .content-wrapper #iframe-content:before {
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 400px;
+    top: 300px;
+    font-family: "Georgia", serif;
+    font-style: italic;
+    font-size: 60px;
+    content: "loading";
+    line-height: 600px;
+    text-align: center; }
+  .content-wrapper #iframe-content iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: none; }
 
 @-moz-keyframes spin {
   100% {
