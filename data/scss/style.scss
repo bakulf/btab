@@ -460,20 +460,6 @@ header {
   }
   #iframe-content {
     position:relative;
-    &:before {
-      display: block;
-      position: absolute;
-      width:100%;
-      height: 400px;
-      top:300px;
-      font-family: "Georgia", serif;
-      font-style: italic;
-
-      font-size: 60px;
-      content: "loading";
-      line-height: 600px;
-      text-align: center;
-    }
     iframe {
       position: absolute;
       top:0;
