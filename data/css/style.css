@@ -156,6 +156,9 @@
 .icon-bug:before {
   content: "\f188"; }
 
+body {
+  overflow-y: hidden; }
+
 button {
   font-family: "Georgia", serif;
   font-style: italic;
@@ -309,10 +312,13 @@ header {
       cursor: pointer; }
 
 .content-wrapper {
+  overflow-y: hidden;
   position: relative;
   top: -3px; }
   .content-wrapper aside {
+    position: relative;
     overflow: auto;
+    padding-top: 60px;
     background: white;
     border-right: 3px solid #EF4036; }
     .content-wrapper aside h2, .content-wrapper aside h3 {
@@ -321,7 +327,11 @@ header {
       font-style: italic;
       font-size: 30px; }
     .content-wrapper aside .tab-toolbar {
-      height: 39px;
+      position: fixed;
+      top: 60px;
+      width: 227px;
+      z-index: 999;
+      height: 30px;
       margin: 0;
       margin-bottom: 20px;
       background: white;

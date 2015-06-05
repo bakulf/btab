@@ -8,6 +8,10 @@ $secondary: $grey;
 @import "mixin.scss";
 @import "fonts.scss";
 
+body {
+  overflow-y: hidden;
+}
+
 button {
   font-family: "Georgia", serif;
   font-style: italic;
@@ -191,10 +195,13 @@ header {
 }
 
 .content-wrapper {
+  overflow-y: hidden;
   position:relative;
   top:-3px;
   aside {
+    position:relative;
     overflow:auto;
+    padding-top:60px;
     h2,h3 {
       margin:0 20px 20px 20px;
       font-family: "Georgia", serif;
@@ -205,7 +212,11 @@ header {
     border-right:3px solid $primary;
     
     .tab-toolbar {
-      height: 39px;
+      position: fixed;
+      top:60px;
+      width:227px;
+      z-index: 999;
+      height: 30px;
       margin:0;
       margin-bottom:20px;
       background: white;
