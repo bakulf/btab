@@ -120,6 +120,9 @@ header {
   .single-item {
     min-height: 240px;
     left:10px;
+    &:after {
+      display: none;
+    }
   }
 }
 
@@ -188,6 +191,8 @@ header {
 }
 
 .content-wrapper {
+  position:relative;
+  top:-3px;
   aside {
     h2,h3 {
       margin:0 20px 20px 20px;
@@ -196,13 +201,39 @@ header {
       font-size:30px;
     }
     background:white;
-    padding-top:20px;
-    overflow: auto;
-    border-right:1px solid $secondary;
-
+    border-right:3px solid $primary;
+    
+    .tab-toolbar {
+      height: 39px;
+      margin:0;
+      margin-bottom:20px;
+      background: white;
+      color: white;
+      li {
+        height: 30px;
+        border-bottom:1px solid $grey;
+        list-style: none;
+        float: left;
+        text-align: center;
+        width: 50%;
+        a {
+          color: $grey;
+          display: block;
+          line-height: 30px;
+          &:hover {
+            color: $primary;
+          }
+        }
+        &:first-child {
+          border-right: 1px solid $grey;
+        }
+      }
+    }
   }
   .url-toolbar {
-    border-bottom:1px solid $secondary;
+    background:$primary;
+    border-bottom:1px solid white;
+    color: white;
     height: 30px;
 
     ul {
@@ -211,11 +242,11 @@ header {
         list-style: none;
         float:left;
         height: 30px;
-        border-right:1px solid $secondary;
+        border-right:1px solid white;
         
         &:last-child {
           border-right:0;
-          border-left: 1px solid $secondary;
+          border-left: 1px solid white;
           float: right;
         }
         &.url-readonly {
@@ -224,8 +255,8 @@ header {
             height: 28px;
             border:none;
             box-shadow:none;
-            background:#fff;
-            color: #bbb;
+            background:none;
+            color: #efefef;
             font-family: "Georgia", serif;
             font-size: 13px;
             font-style: italic;
@@ -238,9 +269,9 @@ header {
           width: 28px;
           text-align: center;
           line-height:28px;
-
+          color: white;
           &.disabled {
-            opacity: 0.2;
+            opacity: 0.7;
             cursor: default;
           }
 
@@ -248,6 +279,9 @@ header {
             -webkit-animation:spin 0.5s linear infinite;
             -moz-animation:spin 0.5s linear infinite;
             animation:spin 0.5s linear infinite;
+          }
+          &:hover {
+            color: #efefef;
           }
         }
       }
@@ -260,6 +294,7 @@ header {
       top:0;
       left: 0;
       border:none;
+      overflow:hidden;
     }
   }
 }
@@ -285,7 +320,7 @@ header {
       height: 0;
       border-style: solid;
       border-width: 20px 20px 20px 0;
-      border-color: transparent $secondary transparent transparent;
+      border-color: transparent $primary transparent transparent;
       position:absolute;
       right:-16px;
       top:50px;
@@ -312,6 +347,7 @@ header {
       img {
         position:absolute;
         top:10px;
+        height: 20px;
       }
       &:first-child {
         width:48%;

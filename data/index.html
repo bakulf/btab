@@ -14,13 +14,13 @@
     <header class="row collapse">
       <div class="large-12 columns">
         <div class="row">
-          <div class="large-7 columns">
+          <div class="large-6 columns">
             <a href="" id="titleAnchor"><img src="img/btab.svg" alt="B:TAB"></a>
             <span class="separator icon-fast-forward"></span>
             <span class="filter-name" id="filterTitleName">&nbsp;</span>
           </div>
-          <div class="large-3 large-offset-2 columns end">
-            <form class="row">
+          <div class="large-4 columns">
+            <form class="row right">
               <div class="form-item">
                 <input type="text" placeholder="Search" value="" id="search">
                 <span class="pipe"></span>
@@ -75,6 +75,14 @@
     <!-- listPage -->
     <div class="content-wrapper row collapse" id="listPage">
       <aside id="tabs" class="large-2 columns">
+        <div class="row collapse">
+          <div class="large-12 columns">
+            <ul class="tab-toolbar">
+              <li><a href="" class="icon-rewind" id="pagePrev" title="Previous page"></a></li>
+              <li><a href="" class="icon-fast-forward" id="pageNext" title="Next page"></a></li>
+            </ul>
+          </div>
+        </div>
         <div class="row">
           <div class="large-12 columns" id="listPageList"></div>
         </div>
@@ -84,8 +92,6 @@
           <ul>
             <li><a href="" class="icon-rewind" id="pageBack" title="Back"></a></li>
             <li><a href="" class="icon-fast-forward" id="pageForward" title="Forward"></a></li>
-            <li><a href="" class="icon-rewind" id="pagePrev" title="Previous page"></a></li>
-            <li><a href="" class="icon-fast-forward" id="pageNext" title="Next page"></a></li>
             <li class="url-readonly"><input type="text" id="pageURL" value="" placeholder="Address" readonly=""></li>
             <li><a href="" class="icon-reload" id="pageReload"></a></li>
           </ul>
