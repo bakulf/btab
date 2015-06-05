@@ -108,6 +108,16 @@ let Controller = {
       return false;
     }.bind(this);
 
+    document.getElementById('pagePrev').onclick = function() {
+      this.goPrev();
+      return false;
+    }.bind(this);
+
+    document.getElementById('pageNext').onclick = function() {
+      this.goNext();
+      return false;
+    }.bind(this);
+
     document.getElementById('pageReload').onclick = function() {
       this.goReload();
       return false;
@@ -435,7 +445,33 @@ let Controller = {
       this.loadingEnd(iframe);
     }.bind(this));
 
+    iframe.addEventListener('mozbrowsershowmodalprompt', function(a) {
+      this.modalPrompt(a.detail);
+    }.bind(this));
+
+    iframe.addEventListener('mozbrowseropenwindow', function(a) {
+      alert("Sorry, window.open() is disabled in B:Tab");
+    }.bind(this));
+
     return iframe;
+  },
+
+  modalPrompt: function(aObj) {
+    var message = aObj.message;
+    var initialValue = aObj.initialValue;
+    var type = aObj.promptType;
+
+    switch (type) {
+      case 'alert':
+        window.alert(message);
+        break;
+      case 'prompt':
+        e.detail.returnValue = window.prompt(message, initialValue);
+        break;
+      case 'confirm':
+        e.detail.returnValue = window.confirm(message);
+        break;
+    }
   },
 
   showIframe: function() {
@@ -469,26 +505,46 @@ let Controller = {
     this._iframe = iframe;
   },
 
-  canGoBack: function() {
-    for (let i = 1; i < this._data.pages.length; ++i) {
-      if (this._data.pages[i].url == this._activeURL) {
-        return this._data.pages[i - 1].url;
+  canGoPrev: function() {
+    for (let i = 1; i < this._filteredPages.length; ++i) {
+      if (this._filteredPages[i].url == this._activeURL) {
+        return this._filteredPages[i - 1].url;
       }
     }
     return null;
   },
 
-  canGoForward: function() {
-    for (let i = 0; i < this._data.pages.length - 1; ++i) {
-      if (this._data.pages[i].url == this._activeURL) {
-        return this._data.pages[i + 1].url;
+  canGoNext: function() {
+    for (let i = 0; i < this._filteredPages.length - 1; ++i) {
+      if (this._filteredPages[i].url == this._activeURL) {
+        return this._filteredPages[i + 1].url;
       }
     }
     return null;
   },
 
   goBack: function() {
-    let url = this.canGoBack();
+    if (!this._iframe) {
+      dump("BTAB goBack: This seems a bug!\n");
+      return;
+    }
+
+    this._iframe.goBack();
+    this.updateBrowserController();
+  },
+
+  goForward: function() {
+    if (!this._iframe) {
+      dump("BTAB goForward: This seems a bug!\n");
+      return;
+    }
+
+    this.iframe.goForward();
+    this.updateBrowserController();
+  },
+
+  goPrev: function() {
+    let url = this.canGoPrev();
     if (!url) {
       return;
     }
@@ -497,8 +553,8 @@ let Controller = {
     this.updateBrowserController();
   },
 
-  goForward: function() {
-    let url = this.canGoForward();
+  goNext: function() {
+    let url = this.canGoNext();
     if (!url) {
       return;
     }
@@ -584,18 +640,44 @@ let Controller = {
     this.maybeVisited();
 
     this.showIframe();
+
+    let url = this._activeURL;
+    $(".single-item").each(function() {
+      if ($(this).attr("data-url") == url) {
+        $(this).addClass('active');
+      } else {
+        $(this).removeClass('active');
+      }
+    });
+
     $("#pageURL").attr('value', this._activeURL);
 
-    if (this.canGoBack()) {
-      $("#pageBack").removeClass('disabled');
-    } else {
-      $("#pageBack").addClass('disabled');
+    this._iframe.getCanGoBack().onsuccess = function(e) {
+      if (e.target.result) {
+        $("#pageBack").removeClass('disabled');
+      } else {
+        $("#pageBack").addClass('disabled');
+      }
     }
 
-    if (this.canGoForward()) {
-      $("#pageForward").removeClass('disabled');
+    this._iframe.getCanGoForward().onsuccess = function(e) {
+      if (e.target.result) {
+        $("#pageForward").removeClass('disabled');
+      } else {
+        $("#pageForward").addClass('disabled');
+      }
+    }
+
+    if (this.canGoPrev()) {
+      $("#pagePrev").removeClass('disabled');
     } else {
-      $("#pageForward").addClass('disabled');
+      $("#pagePrev").addClass('disabled');
+    }
+
+    if (this.canGoNext()) {
+      $("#pageNext").removeClass('disabled');
+    } else {
+      $("#pageNext").addClass('disabled');
     }
   },
 
