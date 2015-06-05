@@ -338,6 +338,9 @@ header {
           line-height: 30px; }
           .content-wrapper aside .tab-toolbar li a:hover {
             color: #EF4036; }
+          .content-wrapper aside .tab-toolbar li a.disabled {
+            opacity: 0.2;
+            cursor: default; }
         .content-wrapper aside .tab-toolbar li:first-child {
           border-right: 1px solid #333333; }
   .content-wrapper .url-toolbar {

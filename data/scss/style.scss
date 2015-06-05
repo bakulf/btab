@@ -223,6 +223,11 @@ header {
           &:hover {
             color: $primary;
           }
+          &.disabled {
+            opacity: 0.2;
+            cursor: default;
+          }
+
         }
         &:first-child {
           border-right: 1px solid $grey;
