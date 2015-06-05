@@ -634,6 +634,8 @@ let Controller = {
     $('#tabs').css('height', height_screen - $('#tabs').offset().top);
     $('iframe').css('width', width_screen - $('#iframe-content').offset().left);
     $('iframe').css('height', height_screen - $('#iframe-content').offset().top);
+
+    $(".tab-toolbar").width($('aside').width());
   },
 
   updateBrowserController: function() {
@@ -641,10 +643,16 @@ let Controller = {
 
     this.showIframe();
 
-    let url = this._activeURL;
-    $(".single-item").each(function() {
-      if ($(this).attr("data-url") == url) {
-        $("#tabs").animate({ scrollTop: $(this).offset().top });
+    let that = this;
+    $("aside .single-item").each(function() {
+      if ($(this).attr("data-url") == that._activeURL) {
+        let offset = 0;
+        if (that._filteredPages[0].url != that._activeURL) {
+          offset = $(this).offset().top - $("aside").offset().top + $("aside").scrollTop();
+        }
+
+        $("aside").animate({ scrollTop: offset });
+
         $(this).addClass('active');
       } else {
         $(this).removeClass('active');
