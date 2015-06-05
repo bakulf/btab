@@ -312,6 +312,7 @@ header {
   position: relative;
   top: -3px; }
   .content-wrapper aside {
+    overflow: auto;
     background: white;
     border-right: 3px solid #EF4036; }
     .content-wrapper aside h2, .content-wrapper aside h3 {
