@@ -644,6 +644,7 @@ let Controller = {
     let url = this._activeURL;
     $(".single-item").each(function() {
       if ($(this).attr("data-url") == url) {
+        $("#tabs").animate({ scrollTop: $(this).offset().top });
         $(this).addClass('active');
       } else {
         $(this).removeClass('active');
