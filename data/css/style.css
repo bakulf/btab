@@ -242,6 +242,7 @@ header {
       margin-top: 21px; }
 
 .overview-list {
+  overflow-y: auto;
   margin-top: 40px; }
   .overview-list h2, .overview-list h3 {
     margin: 0 20px 20px 20px;
@@ -329,7 +330,6 @@ header {
     .content-wrapper aside .tab-toolbar {
       position: fixed;
       top: 60px;
-      width: 227px;
       z-index: 999;
       height: 30px;
       margin: 0;
