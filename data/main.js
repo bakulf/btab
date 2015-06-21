@@ -178,6 +178,8 @@ let Controller = {
   },
 
   gridPageRestInit: function() {
+    this.resize();
+
     let container = document.getElementById('gridPageRest');
     while(container.firstChild) {
       container.removeChild(container.firstChild);
@@ -361,11 +363,27 @@ let Controller = {
       }
     }
 
-    $(".single-item").each(function() {
-      if ($(this).attr("data-url") == aUrl) {
-        $(this).remove();
+    let prevUrl;
+    let nextUrl;
+    let found = false
+    for (let i = 0; i < this._filteredPages.length; ++i) {
+      if (this._filteredPages[i].url == aUrl) {
+        found = true;
+      } else if (found) {
+        nextUrl = this._filteredPages[i].url;
+        found = false;
+      } else if (!nextUrl) {
+        prevUrl = this._filteredPages[i].url;
       }
-    });
+    }
+
+    let pages = [];
+    for (let i = 0; i < this._pages.length; ++i) {
+      if (this._pages[i].url != aUrl) {
+        pages.push(this._pages[i]);
+      }
+    }
+    this._pages = pages;
 
     $("iframe").each(function() {
       if ($(this).attr('src') == aUrl) {
@@ -373,9 +391,8 @@ let Controller = {
       }
     });
 
-    if (this._activeURL == aUrl) {
-      this.mainPage();
-    }
+    this._activeURL = nextUrl ? nextUrl : prevUrl;
+    this.refreshDataNeeded();
   },
 
   loadingStart: function(aIframe) {
@@ -623,19 +640,18 @@ let Controller = {
   },
 
   resize: function() {
-    // Just for the list page
-    if (this._currentPage != 'listPage') {
-      return;
-    }
-
     let height_screen = $(window).height();
     let width_screen = $(window).width();
-    $('.content-wrapper').css('height', height_screen - $('.content-wrapper').offset().top);
-    $('#tabs').css('height', height_screen - $('#tabs').offset().top);
-    $('iframe').css('width', width_screen - $('#iframe-content').offset().left);
-    $('iframe').css('height', height_screen - $('#iframe-content').offset().top);
 
-    $(".tab-toolbar").width($('aside').width());
+    if (this._currentPage == 'listPage') {
+      $('.content-wrapper').css('height', height_screen - $('.content-wrapper').offset().top);
+      $('#tabs').css('height', height_screen - $('#tabs').offset().top);
+      $('iframe').css('width', width_screen - $('#iframe-content').offset().left);
+      $('iframe').css('height', height_screen - $('#iframe-content').offset().top);
+      $(".tab-toolbar").width($('aside').width());
+    } else if (this._currentPage == 'gridPageRest') {
+      $('#gridPageRest').css('height', height_screen - $('#gridPageRest').offset().top);
+    }
   },
 
   updateBrowserController: function() {
@@ -648,7 +664,7 @@ let Controller = {
       if ($(this).attr("data-url") == that._activeURL) {
         let offset = 0;
         if (that._filteredPages[0].url != that._activeURL) {
-          offset = $(this).offset().top - $("aside").offset().top + $("aside").scrollTop();
+          offset = $(this).offset().top - $("aside").offset().top + $("aside").scrollTop() - $(".tab-toolbar li").height() - 10;
         }
 
         $("aside").animate({ scrollTop: offset });
