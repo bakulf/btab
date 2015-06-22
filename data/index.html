@@ -34,7 +34,7 @@
     </header>
 
     <!-- Settings -->
-    <div class="settings row" id="settingsPage">
+    <div class="settings row hidden" id="settingsPage">
       <div class="large-6 columns">
         <form id="settingsForm">
           <div class="form-item">
@@ -58,22 +58,22 @@
     </div>
 
     <!-- Grid Page: no tabs -->
-    <div class="tab-results row" id="gridPageNoTab">
+    <div class="tab-results row hidden" id="gridPageNoTab">
       <h1 class="no-tabs">NO TABS YET! :/</h1>
     </div>
 
     <!-- Grid Page: noresult -->
-    <div class="tab-results row" id="gridPageNoResult">
+    <div class="tab-results row hidden" id="gridPageNoResult">
       <h3 class="search-query">you searched for: <em id="searchGridResult"></em>
       <h1>NO RESULTS</h1>
     </div>
 
     <!-- Grid Page -->
-    <div id="gridPageRest" class="overview-list row">
+    <div id="gridPageRest" class="overview-list row hidden">
     </div>
 
     <!-- listPage -->
-    <div class="content-wrapper row collapse" id="listPage">
+    <div class="content-wrapper row collapse hidden" id="listPage">
       <aside id="tabs" class="large-2 columns">
         <div class="row collapse">
           <div class="large-12 columns">
@@ -109,6 +109,10 @@
 
       $('.button-search').bind('oanimationend animationend webkitAnimationEnd', function() { 
          $(this).toggleClass('icon-search').toggleClass('icon-repeat');
+      });
+
+      $('.hidden').each(function() {
+        $(this).hide();
       });
     </script>
   </body>
