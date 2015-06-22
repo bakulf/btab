@@ -250,7 +250,6 @@ header {
     font-style: italic;
     font-size: 30px; }
   .overview-list .single-item {
-    min-height: 240px;
     left: 10px; }
     .overview-list .single-item:after {
       display: none; }
